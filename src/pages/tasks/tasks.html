@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>EDirectInsure - Todo List</ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="logout()">
+        <ion-icon name="log-out">Logout</ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+
+    <ion-item>
+      <h1>New Project</h1>
+    </ion-item>
+  
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name='list'>
+          </ion-icon> Project Name
+        </ion-label>
+        <ion-input type="text" #projectName [(ngModel)]="projectDescription" ></ion-input>
+      </ion-item>
+      <br>
+      <button ion-button block [disabled]="!projectDescription" (click)="addProject()">Add Project</button>
+     
+    </ion-card-content>
+  
+  </ion-card>
+
+
+  <ion-card *ngFor="let project of projects">
+  
+    <ion-item>
+      <h2>{{project.name}}</h2>
+
+      <ion-input [(ngModel)]="project.name" *ngIf="project.edit"></ion-input>
+
+      <p>{{project.createDate | date:'shortDate'}}</p>
+      
+      <ion-icon name="trash" color="danger" (click)="removeProject(project.name)" item-end> </ion-icon>
+        
+      
+    </ion-item>
+
+    <ion-card-content>
+      
+      <h1 *ngIf="project.tasksTodo.length>0">ToDo</h1>
+      <ion-row *ngFor="let task of project.tasksTodo">
+        <ion-col>
+          <ion-item>
+            <ion-label>{{task.description}}</ion-label>
+            <ion-checkbox (click)="completeTask(project.name, task.id)" color="dark"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-icon name="trash" color="danger" (click)="removeTask(project.name, task.id)" item-end> </ion-icon>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      
+      <h1 *ngIf="project.tasksDone.length>0">Done</h1>
+      <ion-item *ngFor="let task of project.tasksDone">
+        <ion-label>{{task.description}}</ion-label>
+        <ion-checkbox color="dark" checked="true" [disabled] = "true" ></ion-checkbox>
+      </ion-item>
+      
+      
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name='checkmark'>
+          </ion-icon> Task
+        </ion-label>
+        <ion-input type="text" [(ngModel)]="project.taskDescription" ></ion-input>
+      </ion-item>
+      
+      <button ion-button block [disabled]="!project.taskDescription" (click)="addTask(project.name, project.taskDescription)">Add Task</button>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

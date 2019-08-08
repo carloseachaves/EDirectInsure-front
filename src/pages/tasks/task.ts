@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -24,8 +24,14 @@ export class TaskPage {
   constructor(public navCtrl: NavController, 
     public db: AngularFireDatabase,
     public toastCtrl: ToastController,
+    loadingControler: LoadingController,
     private storage: Storage) {
 
+    const loading = loadingControler.create({
+      content: 'Loading'
+    });
+
+    loading.present();
     this.storage.get('user').then(data =>{
 
       this.user = data;
@@ -66,6 +72,10 @@ export class TaskPage {
             tasksTodo: taskTodo
           });
         });
+        if (loading){
+          loading.dismissAll();
+        }
+        
     });
     
 
